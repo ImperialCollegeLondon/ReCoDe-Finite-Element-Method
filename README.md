@@ -1,25 +1,23 @@
 <!-- Your Project title, make it sound catchy! -->
 
-# Project title
+# Numerical Simulation using Finite Element Method 
 
 <!-- Provide a short description to your project -->
 
 ## Description
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam vitae pulvinar
-mauris. Praesent sollicitudin rutrum mauris sed congue. Donec vel orci elit.
-Phasellus luctus sodales elementum. Donec lacinia semper lorem, volutpat
-molestie arcu bibendum mollis. Nulla nec massa vitae sapien varius vulputate
-vel vitae ex. Curabitur convallis iaculis elit at faucibus. Sed eget facilisis
-orci, ut consequat neque.
+Finite Element Method (FEM) is a powerful computational method used across a wide variety of disciplines, including engineering, mathematics and earth science. It is used to solve complex differential equations and simulate real-world scenarios. This project focuses on application of Finite Element method in solid mechanics, but the teachings can be extended to other areas of study.
+It provides a comprehensive, step-by-step tutorial designed to introduce users to the fundamentals of FEM and its practical implementation in Python. The tutorial takes users through all the key stages of numerical simulations, starting from domain meshing and problem discretisation, moving to solving the differential equations and finally analysing and understanding the results.  
+To make the learning process intuitive, the project begins with a straightforward example that demonstrates the methodology and code implementation. As users progress, they are gradually introduced to more advanced aspects of FEM, ensuring a solid foundation and deeper understanding of this method.
 
 <!-- What should the students going through your exemplar learn -->
 
 ## Learning Outcomes
 
-- Skill 1
-- Skill 2
-- Skill 3
+- Develop understanding of the fundaments of Finite Element Method
+- Learn how to create custom FEM code and adapt it to solve partial differential equations
+- Gain familiarity with existing libraries and tools available for FEM implementation
+- Develop skills to interpret solutions and effectively analyse the simulation results
 
 <!-- How long should they spend reading and practising using your Code.
 Provide your best estimate -->
@@ -31,16 +29,10 @@ Provide your best estimate -->
 
 ## Requirements
 
-<!--
-If your exemplar requires students to have a background knowledge of something
-especially this is the place to mention that.
+#### Academic
+To sucessfully complete this examplar the user should have basic understanding of key mathematical concepts, including linear algebra (such as matrices, vectors, and determinants) and differential equations (both ordinary and partial differential equations, linear system of equations)
 
-List any resources you would recommend to get the students started.
-
-If there is an existing exemplar in the ReCoDE repositories link to that.
--->
-
-### Academic
+Familiarity with Python programming, using existing libraries, writing functions and graph plotting.
 
 <!-- List the system requirements and how to obtain them, that can be as simple
 as adding a hyperlink to as detailed as writting step-by-step instructions.
@@ -59,6 +51,16 @@ Here are some examples:
 
 ### System
 
+System requirements:
+- Python 3.11 or newer
+- Paraview 4.0 or newer
+- Jupyter Notebooks
+
+Python libraries used:
+- pygmsh
+- numpy
+- matplotlib
+  
 <!-- Instructions on how the student should start going through the exemplar.
 
 Structure this section as you see fit but try to be clear, concise and accurate
