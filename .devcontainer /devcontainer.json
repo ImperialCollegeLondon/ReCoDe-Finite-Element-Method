@@ -1,5 +1,5 @@
 {
   "name": "My Custom Environment",
   "image": "mcr.microsoft.com/devcontainers/universal:focal",
-  "postCreateCommand": "sudo apt-get update && sudo apt-get install -y python3 python3-pip python3-gmsh && pip3 install -y numpy matplotlib pygmsh"
+  "postCreateCommand": "sudo apt-get update && sudo apt-get install -y python3 python3-pip python3-gmsh && python3 -m pip install numpy matplotlib pygmsh"
 }
