@@ -1,0 +1,6 @@
+{
+  "build": {
+     "dockerfile": "./Dockerfile"
+     },
+  "postCreateCommand": "pip install -r .devcontainer/requirements.txt"
+}
