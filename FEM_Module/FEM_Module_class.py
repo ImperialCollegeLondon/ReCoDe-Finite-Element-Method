@@ -277,3 +277,147 @@ class FEM_model:
             dNs[5] = 4. - 4. * r - 8. * s
 
         return dNs
+
+    def Jacobian(self, point, corner_nodes):
+        """
+        Calculate the Jacobian matrix for mapping between the global and local
+        coordinate systems. The Jacobian matrix is calculated at point in local
+        coordinate system.
+
+        TO DO: Extend the function to 3D
+        Parameters
+        ----------
+        point (list of floats) : a list of two coordinates  in local coordinate
+                                system in range [0,1]
+
+        corner_nodes (list of list of floats): a list of coordinates of corner
+                    nodes in the elment in global coordinate system
+
+        Returns
+        -------
+        det (float) : scale of volumetric differences between isoparametric
+                      element and element in global coordinate system
+
+        Jacobian_mat (numpy.array) : square matrix of size (dim,dim), where dim
+                    is the spatial dimension of the domain
+
+        """
+
+        Jacobian_mat = np.zeros((self.domain_dim, self.domain_dim))
+
+        # Get the derivatives of the basis functions at point
+        dnr = self.basis_functions_dNr(point)
+        dns = self.basis_functions_dNs(point)
+
+        # take dot product between the derivatives and the corner nodes for
+        # each axis
+        for dim in range(self.domain_dim):
+            Jacobian_mat[0, dim] = np.dot(dnr, corner_nodes[:, dim])
+            Jacobian_mat[1, dim] = np.dot(dns, corner_nodes[:, dim])
+
+        # get the determinant of the Jacobian matrix
+        det = np.linalg.det(Jacobian_mat)
+        return det, Jacobian_mat
+
+    def dN_To2DOF(self, B):
+        """
+        This functions splits the derivative matrix B into the strain
+        components. Depending on the dimensions of thedomain. The first row is
+        the strain component in x-direction and the second row is the strain in
+        y-direction.
+        If original B matrix for element with n nodes is
+
+            dN1/dx dN2/dx ... dNn/dx
+            dN1/dy dN2/dy ... dNn/dy
+
+        The converted strain matrix is
+            dN1/dx    0     dN2/dx   0   ...  dNn/dx    0
+              0     dN1/dy     0   dN2/dy...   0     dNn/dy
+            dN1/dy  dN1/dx  dN2/dy dN2/dx... dNn/dy  dNn/dx
+
+        Parameters
+        ----------
+        B (numpy matrix) : matrix containing the shape function derivatives at
+        a point. The expected shape is (dim,n), where dim is domain dimension
+        and n is the number of nodes in the element
+
+        Returns
+        -------
+        new_B (numpy matrix) : converted matrix to strain displacement matrix
+        in shape (dim C (dim-1), n * dim), where
+        C is the choose function, so for dim 2 the shape will be (3,n)
+
+
+        """
+        shape = np.shape(B)
+        new_B = np.zeros((3, shape[1] * 2))
+
+        for i in range(shape[1]):
+            new_B[0][i * 2] = B[0][i]
+            new_B[1][i * 2 + 1] = B[1][i]
+
+            new_B[2][i * 2] = B[1][i]  # /dy
+            new_B[2][i * 2 + 1] = B[0][i]  # /dx
+
+        return new_B
+
+    def stiffness_matrix_2D(self, E, nu):
+        """
+        This function calculates the stiffness matrix for each element based on
+        the material properties.
+
+        Parameters
+        ----------
+        E (float) : the Young's modulus of the domain, this measure the
+        stiffness of the material in response to uniaxial stress
+        nu (float) : the Poisson ratio of the domain, this measures the
+        lateral strain relative to axial strain,when domain is subjected to
+        uniaxial stress.
+
+        Returns
+        -------
+        D (numpy matrix) : the stiffness matrix for 2D domain of shape (3,3)
+
+
+        """
+        # 2D case
+        D = np.zeros((3, 3))
+
+        # calculate the coefficients of the matrix
+        frac = nu / (1. - nu)
+        coeff = (E * (1 - nu)) / ((1. + nu) * (1. - 2. * nu))
+
+        # fill the diagonals of the matrix
+        np.fill_diagonal(D, 1)
+        D[2][2] = (1. - 2. * nu) / (2. * (1. - nu))
+
+        # fill the off diagonals of the matrix
+        D[0, 1] = frac
+        D[1, 0] = frac
+
+        D = D * coeff
+        return D
+
+    def solve(self, A_matrix, b):
+        """
+        Solve the linear system of equations that is accumulated element by
+        element during the assembly step
+
+        Parameters
+        ----------
+        A_matrix (numpy matrix) : a square matrix contains all the element
+        contributions.
+
+        b (numpy row vector) : the right-hand-side vector of the linear system
+        of equations. This contains the boundary condtions information of the
+        system.
+
+        Returns
+        -------
+        x (numpy vector) :  the solution vector that contains the nodal
+        solutions of the differential system of equations.
+
+        """
+        x = np.linalg.solve(A_matrix, b)
+        return x
+
