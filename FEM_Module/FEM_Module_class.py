@@ -15,6 +15,7 @@ class FEM_model:
         whether the domain is in 2D or 3D"""
         self.solution = np.empty((0, domain_dim))
         self.domain_dim = domain_dim
+        
 
     def domain_mesh(self,  element_degree, refinement, x_limits, y_limits,
                     z_limits=[0, 0]):
@@ -66,6 +67,9 @@ class FEM_model:
         elif self.degree == 2:
             self.element_name = 'triangle6'
 
+        # List of 2D elements to be used in accumulation
+        self.element_list_2D = self.mesh.cells_dict[self.element_name]
+        self.global_node_coords = self.mesh.points
         return self.mesh
 
     def visualise_mesh(self):
@@ -142,23 +146,23 @@ class FEM_model:
 
             weights = np.array([1., 1., 1., 1.]) * 1 / 6.
 
-        elif self.degree == 3:
-            Points = np.array([
+        # elif self.degree == 3:
+        Points = np.array([
                 [0.4459484909, 0.4459484909],
                 [0.4459484909, 0.1081030182],
                 [0.1081030182, 0.4459484909],
                 [0.0915762135, 0.0915762135],
                 [0.0915762135, 0.8168475730],
                 [0.8168475730, 0.0915762135]
-            ])
-            weights = np.array([
+        ])
+        weights = np.array([
                 0.2233815897,
                 0.2233815897,
                 0.2233815897,
                 0.1099517437,
                 0.1099517437,
                 0.1099517437
-            ])
+        ])
 
         return Points, weights
 
