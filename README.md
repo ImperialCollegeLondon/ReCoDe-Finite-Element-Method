@@ -92,6 +92,26 @@ You can use ellipsis (...) to suggest that there are more files or folders
 in a tree node.
 
 -->
+A significant part of our understanding of the real world comes from differential equations, which describe the behaviour of various quantities. These equations are fundamental across many scientific fields, including physics, geoscience, and medicine, as they explain how systems behave under specific conditions, how they respond to external forces and change with time.
+
+Solving differential equations allows us to predict and analyse real world phenomena. In many cases, computer simulations are used to solve these equations for specific scenarios. Engineers use computer simulations to optimize product designs, ensuring they can withstand real world conditions, while geoscientists use them to study complex natural processes or our interactions with them, such as energy storage. These simulations enable us to test hypotheses and evaluate outcomes without the need for expensive real life experiments. However, their accuracy and reliability depend on our ability to effectively solve the underlying systems of differential equations.
+
+In certain simplified cases, differential equations can be solved analytically, providing exact solutions. However, these cases are often over simplified and may not be flexible enough for practical applications. When analytical solutions are not feasible, we use numerical methods to approximate solutions. A wide range of numerical techniques exists, each designed for solving specific  problems and work to improve accuracy and efficiency of the solutions..
+
+One of the most widely used numerical methods is the Finite Element Method (FEM). It is particularly popular in mechanics, including structural and rock mechanics, fluid dynamics, and heat transfer. Since its introduction in the 1950s, FEM has become an essential tool in numerical modeling, with extensive research dedicated to refining and advancing its capabilities.  
+
+The core principle of Finite Element Method is discretising the problem domain into smaller interconnected elements. This process, known as discretisation, allows the problem to be described at the element level. Each element has an associated number of nodes, which are shared by adjacent elements. These nodes form relationships between elements that can be aggregated to a global system of equations.  We By solving this system, we obtain an approximate solution for the entire domain at the nodes. Using interpolation we can then calculate the solution at any point in the domain.
+
+Therefore the key stages of Finite Element Methods are:
+
+- Domain discretisation  -  dividing the domain into finite elements
+- Element level problem formulation - defining the equations on each element using basis functions
+- Assembly to global system - combining the element equations into a global system
+- Application of boundary conditions - applying constrains and conditions to the problem to solve for unique solutions.
+- Solving linear system of equations - using a numerical solver to find the solution
+- Post processing of solution - interpreting, visualising and analysing the solution
+
+This exercise will guide you through the key stages of constructing a Finite Element code. It will focus on a simple problem of heat transfer to build the basics of the method. At the end of this exercise you should have a good understanding of how Finite Element Method works. The next exercise will build on these concepts and look at solving a slightly more complex problem. 
 
 ## Project Structure
 
