@@ -117,18 +117,42 @@ This exercise will guide you through the key stages of constructing a Finite Ele
 
 ```log
 .
-├── examples
-│   ├── ex1
-│   └── ex2
-├── src
-|   ├── file1.py
-|   ├── file2.cpp
-|   ├── ...
-│   └── data
-├── app
-├── docs
-├── main
-└── test
+C:.
+|   .gitignore
+|   LICENSE.md
+|   mkdocs.yml
+|   README.md
+|   requirements.txt
+|
++---docs
+|   |   index.md
+|   |
+|   +---.icons
+|   |   \---logos
+|   |           iclogo.svg
+|   |
+|   \---assets
+|           iclogo.png
+|
++---FEM_Module
+|       FEM_Module_class.py
+|
+\---notebooks
+    |   Part_1.ipynb
+    |   Part_2.ipynb
+    |
+    \---img
+            Cantilever_diagram.png
+            element_in_mesh.png
+            element_types.png
+            hat_functions_as_basis.png
+            isoparametric_triangle.png
+            mapping_to_isoparametric.png
+            rectangularmesh.png
+            rectangular_mesh_simple.png
+            temp_result.png
+            triangular_mesh.png
+
 ```
 
 <!-- Change this to your License. Make sure you have added the file on GitHub -->
