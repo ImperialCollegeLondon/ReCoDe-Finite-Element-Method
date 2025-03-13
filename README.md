@@ -32,7 +32,7 @@ Provide your best estimate -->
 #### Academic
 To sucessfully complete this examplar the user should have basic understanding of key mathematical concepts, including linear algebra (such as matrices, vectors, and determinants) and differential equations (both ordinary and partial differential equations, linear system of equations)
 
-Familiarity with Python programming, using existing libraries, writing functions and graph plotting.
+Familiarity with Python programming, using existing libraries, writing classes, functions and graph plotting.
 
 <!-- List the system requirements and how to obtain them, that can be as simple
 as adding a hyperlink to as detailed as writting step-by-step instructions.
