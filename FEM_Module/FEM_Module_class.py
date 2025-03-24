@@ -70,6 +70,8 @@ class FEM_model:
         # List of 2D elements to be used in accumulation
         self.element_list_2D = self.mesh.cells_dict[self.element_name]
         self.global_node_coords = self.mesh.points
+        self.num_nodes = len(self.mesh.points)
+
         return self.mesh
 
     def visualise_mesh(self):
@@ -140,29 +142,12 @@ class FEM_model:
             np.array([1., 1., 1., 1.]) * 1 / 6.
 
         """
-        if self.degree == 2:
-            Points = np.array([[1 / 6., 2 / 3.], [1 / 6., 1 / 6],
+
+        Points = np.array([[1 / 6., 2 / 3.], [1 / 6., 1 / 6],
                                [2 / 3., 1 / 6.]])
 
-            weights = np.array([1., 1., 1., 1.]) * 1 / 6.
+        weights = np.array([1., 1., 1.]) * 1 / 6.
 
-        # elif self.degree == 3:
-        Points = np.array([
-                [0.4459484909, 0.4459484909],
-                [0.4459484909, 0.1081030182],
-                [0.1081030182, 0.4459484909],
-                [0.0915762135, 0.0915762135],
-                [0.0915762135, 0.8168475730],
-                [0.8168475730, 0.0915762135]
-        ])
-        weights = np.array([
-                0.2233815897,
-                0.2233815897,
-                0.2233815897,
-                0.1099517437,
-                0.1099517437,
-                0.1099517437
-        ])
 
         return Points, weights
 
@@ -423,5 +408,126 @@ class FEM_model:
 
         """
         x = np.linalg.solve(A_matrix, b)
+        self.x = x
         return x
 
+
+    def write_vtk(self,variable_name, variable_type, filename):
+        degree = self.degree
+        mesh = self.mesh
+        solution = self.x
+
+        filename = filename + ".vtk"
+        num_nodes = len(mesh.points)
+
+        if os.path.exists(filename):
+            print(f"File '{filename}' already exists. Please provide a different name")
+            return
+
+        file = open(filename, "w")  # creae an empty file
+        file.write("# vtk DataFile Version 3.0 ")
+        file.write("\nFinite-element dataset: variable: " + variable_name + ", timestep: 100")
+        file.write("\nASCII \n\nDATASET UNSTRUCTURED_GRID \nPOINTS " + str(num_nodes) + " float\n")
+        ## add points to the file
+        for point in mesh.points:
+            file.write(str(round(point[0], 6)) + " " + str(round(point[1], 6)) + " " + str(round(point[2], 6)) + "\n")
+
+        if degree == 1:
+            element_types = [("line", 3), ("triangle", 5)]
+            num_nodes_per_el = [2, 3]
+        elif degree == 2:
+            element_types = [("line3", 21), ("triangle6", 22)]
+            num_nodes_per_el = [3, 6]
+
+        num_line_elements = len(mesh.cells_dict[element_types[0][0]])
+        num_triangular_elements = len(mesh.cells_dict[element_types[1][0]])
+
+        file.write("\nCELLS " + str(
+            num_line_elements + num_triangular_elements))  ## add total number of elements (line & triangular)
+        len_cell_list = num_line_elements * (num_nodes_per_el[0] + 1) + num_triangular_elements * (num_nodes_per_el[1] + 1)
+        file.write(" " + str(len_cell_list) + "\n")  ## add number of entries in this section
+        ## (number of nodes in line element + 1 for element type ) * number of line elements
+
+        ## add all the line elements
+        for element in mesh.cells_dict[element_types[0][0]]:
+            file.write(str(len(element)) + " ")
+            for node in element:
+                file.write(str(node) + " ")
+            file.write("\n")
+
+        ## add the triangular elements
+        for element in mesh.cells_dict[element_types[1][0]]:
+            file.write(str(len(element)) + " ")
+            for node in element:
+                file.write(str(node) + " ")
+            file.write("\n")
+
+        ## add element type (numerical value of the type)
+        file.write("\nCELL_TYPES " + str(num_line_elements + num_triangular_elements) + "\n")
+        for element in mesh.cells_dict[element_types[0][0]]:
+            file.write(str(element_types[0][1]) + "\n")
+        for element in mesh.cells_dict[element_types[1][0]]:
+            file.write(str(element_types[1][1]) + "\n")
+
+        ## add the value of the solution fiel for each node
+        ## note the difference in set up based on whether the solution is scalar or vector
+        file.write("\nPOINT_DATA " + str(len(mesh.points)) + "\n")
+
+        if variable_type == "scalar":
+            file.write("SCALARS " + variable_name + " float\n")
+            file.write("LOOKUP_TABLE default\n")
+            for value in solution:
+                file.write(str(round(value, 10)) + "\n")
+
+        if variable_type == "vector":
+            file.write("VECTORS " + variable_name + " float\n")
+            for value_ind in range(int(len(solution)/2)):
+                file.write(
+                    str(round(solution[value_ind*self.domain_dim], 10)) + " "
+                    + str(round(solution[value_ind*self.domain_dim+1], 10)) + " "
+                    + str(round(0, 10)) + "\n")
+        file.close()
+
+    def analytical_solution_x(self,x, y, P, L, E, Poisson, c, t):
+        """ Analytical solution in x -direction at point (x,y)
+
+        Parameters
+        -----------
+        x,y (floats) : gloabl coordinates of the point
+        P (float) : load applied at the end of the beam
+        L (float) : length of the beam
+        E (float) : Youngs modulus
+        Poisson (float) : Poisson ratio of material
+        c (float) : Half of the height of the beam
+        t (float) :
+        """
+        I = (2 * t * c**3) / 3.
+        G = E / (2 * (1 + Poisson))
+        part0 = (P * (x**2 - L**2) * y) / (2 * E * I)
+        part1 = (Poisson * P * y * (y**2 - c**2)) / (6 * E * I)
+        part2 = (P * y * (y**2 - c**2)) / (6 * G * I)
+
+        return -part0-part1+part2
+
+    def analytical_solution_y(self,x, y, P, L, E, Poisson, c, t):
+        """ Analytical solution in y -direction at point (x,y)
+
+        Parameters
+        -----------
+        x,y (floats) : gloabl coordinates of the point
+        P (float) : load applied at the end of the beam
+        L (float) : length of the beam
+        E (float) : Youngs modulus
+        Poisson (float) : Poisson ratio of material
+        c (float) : Half of the height of the beam
+        t (float) :
+        """
+        I = (2 * t * c * c**2) / 3
+        G = E/(2*(1+Poisson))
+        part0 = (Poisson * P * x * y**2) / (2 * E * I)
+        part1 = (P * (x**3 - L**3)) / (6 * E * I)
+        part2 = (P * L**2) / (2 * E * I)
+        part3 = (Poisson * P * c**2) / (6 * E * I)
+        part4 = (P * c**2) / (3 * G * I)
+
+        return part0+part1-(part2+part3+part4)*(x-L)
