@@ -1,0 +1,11 @@
+# We exclude the notebooks folder because syntax errors in some of the cells prevent ruff from
+# running
+exclude = ["notebooks"]
+
+[lint]
+select = [
+    "E",   # pycodestyle
+    "F",   # Pyflakes
+    "I",   # isort
+    "RUF", # ruff
+]
