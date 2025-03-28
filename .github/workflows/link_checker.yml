@@ -24,9 +24,16 @@ jobs:
 
       - name: Convert Notebooks to Markdown
         run: |
+          output_dir="ipynb_files_converted_to_md_files"
           for notebook in $(find . -name "*.ipynb"); do
-            output_dir="ipynb_files_converted_to_md_files"
+            # Clear output cells as these may contain things which look like links but
+            # aren't (e.g. bundled plotly JavaScript)
+            jupyter nbconvert "$notebook" --clear-output
+
+            # Convert file to markdown
             jupyter nbconvert --to markdown "$notebook" --output-dir="$output_dir"
+
+            # Copy across image assets, if present
             notebook_dir=$(dirname "$notebook")
             for asset_dir in "img" "image" "images" "asset" "assets"; do
               if [ -d "$notebook_dir/$asset_dir" ]; then
