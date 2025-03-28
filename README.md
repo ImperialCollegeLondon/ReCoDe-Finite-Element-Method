@@ -96,11 +96,11 @@ A significant part of our understanding of the real world comes from differentia
 
 Solving differential equations allows us to predict and analyse real world phenomena. In many cases, computer simulations are used to solve these equations for specific scenarios. Engineers use computer simulations to optimize product designs, ensuring they can withstand real world conditions, while geoscientists use them to study complex natural processes or our interactions with them, such as energy storage. These simulations enable us to test hypotheses and evaluate outcomes without the need for expensive real life experiments. However, their accuracy and reliability depend on our ability to effectively solve the underlying systems of differential equations.
 
-In certain simplified cases, differential equations can be solved analytically, providing exact solutions. However, these cases are often over simplified and may not be flexible enough for practical applications. When analytical solutions are not feasible, we use numerical methods to approximate solutions. A wide range of numerical techniques exists, each designed for solving specific  problems and work to improve accuracy and efficiency of the solutions..
+In certain simplified cases, differential equations can be solved analytically, providing exact solutions. However, these cases are often over simplified and may not be flexible enough for practical applications. When analytical solutions are not feasible, we use numerical methods to approximate solutions. A wide range of numerical techniques exists, each designed to solve specific problems and improve the accuracy and efficiency of the solutions.
 
 One of the most widely used numerical methods is the Finite Element Method (FEM). It is particularly popular in mechanics, including structural and rock mechanics, fluid dynamics, and heat transfer. Since its introduction in the 1950s, FEM has become an essential tool in numerical modeling, with extensive research dedicated to refining and advancing its capabilities.  
 
-The core principle of Finite Element Method is discretising the problem domain into smaller interconnected elements. This process, known as discretisation, allows the problem to be described at the element level. Each element has an associated number of nodes, which are shared by adjacent elements. These nodes form relationships between elements that can be aggregated to a global system of equations.  We By solving this system, we obtain an approximate solution for the entire domain at the nodes. Using interpolation we can then calculate the solution at any point in the domain.
+The core principle of FEM is discretising the problem domain into smaller interconnected elements. This process, known as discretisation, allows the problem to be described at the element level. Each element has an associated number of nodes, which are shared by adjacent elements. These nodes form relationships between elements that can be aggregated to a global system of equations. Solving this system yields an approximate solution at the nodes across the domain. Interpolation then allows us to calculate the solution at any point.
 
 Therefore the key stages of Finite Element Methods are:
 
@@ -111,24 +111,46 @@ Therefore the key stages of Finite Element Methods are:
 - Solving linear system of equations - using a numerical solver to find the solution
 - Post processing of solution - interpreting, visualising and analysing the solution
 
-This exercise will guide you through the key stages of constructing a Finite Element code. It will focus on a simple problem of heat transfer to build the basics of the method. At the end of this exercise you should have a good understanding of how Finite Element Method works. The next exercise will build on these concepts and look at solving a slightly more complex problem. 
+[This exercise](notebooks/Part_1.ipynb) will guide you through the key stages of constructing a Finite Element code. It will focus on a simple problem of heat transfer to build the basics of the method. At the end of this exercise you should have a good understanding of how FEM works. [The next exercise](notebooks/Part_2.ipynb) will build on these concepts and look at solving a slightly more complex problem. 
 
 ## Project Structure
 
-```log
-.
-├── examples
-│   ├── ex1
-│   └── ex2
-├── src
-|   ├── file1.py
-|   ├── file2.cpp
-|   ├── ...
-│   └── data
-├── app
-├── docs
-├── main
-└── test
+```
+|   .gitignore
+|   LICENSE.md
+|   mkdocs.yml
+|   README.md
+|   requirements.txt
+|
++---docs
+|   |   index.md
+|   |
+|   +---.icons
+|   |   \---logos
+|   |           iclogo.svg
+|   |
+|   \---assets
+|           iclogo.png
+|
++---FEM_Module
+|       FEM_Module_class.py
+|
+\---notebooks
+    |   Part_1.ipynb
+    |   Part_2.ipynb
+    |
+    \---img
+            Cantilever_diagram.png
+            element_in_mesh.png
+            element_types.png
+            hat_functions_as_basis.png
+            isoparametric_triangle.png
+            mapping_to_isoparametric.png
+            rectangularmesh.png
+            rectangular_mesh_simple.png
+            temp_result.png
+            triangular_mesh.png
+
 ```
 
 <!-- Change this to your License. Make sure you have added the file on GitHub -->
