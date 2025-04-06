@@ -15,7 +15,33 @@ class Run_Cantilever:
         whether the domain is in 2D or 3D"""
         self.solution = np.empty((0, domain_dim))
         self.domain_dim = domain_dim
-    
+
+        self.Youngs_modulus = 1e6
+        self.Poisson_ratio = 0.25
+
+        self.degree = 2
+
+        self.element_list_2D = []
+        self.global_node_coords = []
+        self.x_start = 0
+        self.x_end = 10
+        self.c=3
+
+        self.num_nodes = 0.
+        self.A_matrix = np.empty((2,2))  ## note that for each node there are 2 d.o.f
+        self.b = np.zeros((2,))
+        self.x = np.zeros((2,))
+
+        self.nodes_on_left_ = []
+        self.nodes_on_right_ = []
+        self.elements_left_ =  []
+        self.elements_right_ = []
+
+        self.P = 80
+        
+        
+
+
     def set_material_properties(self,Young_modulus, Poisson_ratio):
         self.Youngs_modulus = Young_modulus
         self.Poisson_ratio = Poisson_ratio
@@ -51,7 +77,8 @@ class Run_Cantilever:
 
 
         """
-
+        if element_degree not in (1, 2):
+            raise ValueError("For this exercise degree must be linear (1) or quadratic (2)")
         self.degree = element_degree
 
         # Create the pygmsh mesh objec with the specified input arguments
@@ -116,7 +143,7 @@ class Run_Cantilever:
         triangulation = Triangulation(x, y, triangles)
 
         # Plot the mesh
-        plt.figure(figsize=(10, 5))
+        plt.figure()
         plt.triplot(triangulation, color='blue', lw=0.8)
         plt.scatter(x, y, color='red', s=10, zorder=5)
         plt.title("Mesh Visualization")
@@ -126,7 +153,7 @@ class Run_Cantilever:
         plt.grid(True)
         plt.show()
 
-    def integrationPoints(self):
+    def integration_points(self):
         """
         The Gaussian integeration points for isoparametric 2D triangles.
         Currently supports only quadratic and cubic elements.
@@ -142,17 +169,11 @@ class Run_Cantilever:
         Points : numpy.array of shape (n,2), where n depends on element degree.
         weights : numpy.array of shape (1,n)
 
-        Example:
-            >>> integrationPoints()
-            np.array([[1 / 6., 2 / 3.], [1 / 6., 1 / 6],[2 / 3., 1 / 6.]]),
-            np.array([1., 1., 1., 1.]) * 1 / 6.
-
         """
-        if self.degree == 2:
-            Points = np.array([[1 / 6., 2 / 3.], [1 / 6., 1 / 6],
+        Points = np.array([[1 / 6., 2 / 3.], [1 / 6., 1 / 6],
                                [2 / 3., 1 / 6.]])
 
-            weights = np.array([1., 1., 1.]) * 1 / 6.
+        weights = np.array([1., 1., 1.]) * 1 / 6.
 
 
         return Points, weights
@@ -290,13 +311,13 @@ class Run_Cantilever:
         return dN
 
 
-    def Integration_points_1D(self):
+    def integration_points_1D(self):
         IP_line = [-1/np.sqrt(3.),  1/np.sqrt(3.)]
         IP_w = [1.,1.]
         return IP_line, IP_w
 
 
-    def Jacobian_1D(self,pt, element_xy_coord):
+    def jacobian_1D(self,pt, element_xy_coord):
         dN = self.der_basis_fun_line_quad(pt)
         x_vals=element_xy_coord[:,1]
         return np.dot(dN,x_vals )
@@ -304,7 +325,7 @@ class Run_Cantilever:
        
        
        
-    def Jacobian(self, point, corner_nodes):
+    def jacobian(self, point, corner_nodes):
         """
         Calculate the Jacobian matrix for mapping between the global and local
         coordinate systems. The Jacobian matrix is calculated at point in local
@@ -438,7 +459,7 @@ class Run_Cantilever:
             
             # ------------ User Input required ------------------------------------------#
             # -- Step 1. Set the integration points IP and their weights 
-            IPs, IP_weights = self.integrationPoints()
+            IPs, IP_weights = self.integration_points()
 
             # -- Step 2. Create empty LHS matrix for the element stiffness matrix ------------#
             # -- recall that variable element contains the list of the nodes and that each node has 2 d.o.f
@@ -450,7 +471,7 @@ class Run_Cantilever:
                 # -- Step 4. Get the list of corner nodes in the element and calculate
                 # --------   the Jacobian matrix using function Jacobian in FEM_module
                 e_nodes_xy = self.global_node_coords[element][:,:3]
-                detJ, JMat = self.Jacobian(IP, e_nodes_xy)
+                detJ, JMat = self.jacobian(IP, e_nodes_xy)
                 
                 # -- Step 5. Calculate the derivative basis functions at the integration point 
                 # --------   use the function basis_functions_der() and multiply it by the inverse of the Jacobian matrix
@@ -508,7 +529,7 @@ class Run_Cantilever:
 
             # ------------ User Input required ------------------------------------------#
             # -- Step 1. Set the integration points IP and their weights for 1D element
-            IPs, IP_weights = self.Integration_points_1D()
+            IPs, IP_weights = self.integration_points_1D()
 
             # -- Step 2. Create empty RHS vector for element level force accumulation ------------#
             # -- recall that variable element contains the list of the nodes and that each node has 2 d.o.f
@@ -529,7 +550,7 @@ class Run_Cantilever:
                 # -- Step 4. Get the list of corner nodes in the element and calculate
                 # --------   the Jacobian matrix in 1D using function Jacobian_1D
                 e_nodes_xy = self.global_node_coords[element][:,:3]
-                detJ = self.Jacobian_1D(IP, e_nodes_xy)
+                detJ = self.jacobian_1D(IP, e_nodes_xy)
 
                 # -- Step 5. Calculate the basis functions of 1D element
                 N = self.basis_fun_line_quad(IP)
