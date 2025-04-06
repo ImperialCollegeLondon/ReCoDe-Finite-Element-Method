@@ -8,7 +8,7 @@
 
 Finite Element Method (FEM) is a powerful computational method used across a wide variety of disciplines, including engineering, mathematics and earth science. It is used to solve complex differential equations and simulate real-world scenarios. This project focuses on application of FEM in solid mechanics, but the teachings can be extended to other areas of study.
 It provides a comprehensive, step-by-step tutorial designed to introduce users to the fundamentals of FEM and its practical implementation in Python. The tutorial takes users through all the key stages of numerical simulations, starting from domain meshing and problem discretisation, moving to solving the differential equations and finally analysing and understanding the results.  
-To make the learning process intuitive, the project begins with a straightforward example that demonstrates the methodology and code implementation. As users progress, they are gradually introduced to more advanced aspects of FEM, ensuring a solid foundation and deeper understanding of this method.
+# To make the learning process intuitive, the project begins with a straightforward example that demonstrates the methodology and code implementation. As users progress, they are gradually introduced to more advanced aspects of FEM, ensuring a solid foundation and deeper understanding of this method.
 
 <!-- What should the students going through your exemplar learn -->
 
@@ -21,6 +21,8 @@ To make the learning process intuitive, the project begins with a straightforwar
 
 <!-- How long should they spend reading and practising using your Code.
 Provide your best estimate -->
+
+In this project, the exercises are integrated with the theoretical components.
 
 | Task       | Time    |
 | ---------- | ------- |
@@ -60,6 +62,8 @@ Python libraries used:
 - pygmsh
 - numpy
 - matplotlib
+
+
   
 <!-- Instructions on how the student should start going through the exemplar.
 
@@ -92,6 +96,7 @@ You can use ellipsis (...) to suggest that there are more files or folders
 in a tree node.
 
 -->
+### Finite Element Method Overview
 A significant part of our understanding of the real world comes from differential equations, which describe the behaviour of various quantities. These equations are fundamental across many scientific fields, including physics, geoscience, and medicine, as they explain how systems behave under specific conditions, how they respond to external forces and change with time.
 
 Solving differential equations allows us to predict and analyse real world phenomena. In many cases, computer simulations are used to solve these equations for specific scenarios. Engineers use computer simulations to optimize product designs, ensuring they can withstand real world conditions, while geoscientists use them to study complex natural processes or our interactions with them, such as energy storage. These simulations enable us to test hypotheses and evaluate outcomes without the need for expensive real life experiments. However, their accuracy and reliability depend on our ability to effectively solve the underlying systems of differential equations.
@@ -111,40 +116,71 @@ Therefore the key stages of Finite Element Methods are:
 - Solving linear system of equations - using a numerical solver to find the solution
 - Post processing of solution - interpreting, visualising and analysing the solution
 
-[This exercise](notebooks/Part_1.ipynb) will guide you through the key stages of constructing a Finite Element code. It will focus on a simple problem of heat transfer to build the basics of the method. At the end of this exercise you should have a good understanding of how FEM works. [The next exercise](notebooks/Part_2.ipynb) will build on these concepts and look at solving a slightly more complex problem. 
+### Project Overview
+The project is split into two main examples. Inside each examples there are smaller exercises that allow the user to apply and practice the theoretical components presented. For some exercises the user is expected to complete the code. The missing parts are indicated with `...` and the solutions are provided in the hidden cells marked "Solution" in red. By double-clicking on the hidden cells, the user can reference solutiona and copy and past into the code cells.
+
+[This exercise](notebooks/Part_1.ipynb) will guide you through the key stages of constructing a Finite Element code. It will focus on a simple problem of heat transfer to build the basics of the method. At the end of this exercise you should have a good understanding of how FEM works.
+
+[The next exercise](notebooks/Part_2.ipynb) will build on these concepts and look at solving a slightly more complex problem: an engineering problem where we solve for displacement vector. In this exercise we focus on applying different type of boundary conditions and analysing solution convergence to analytical solution.
+
 
 ## Project Structure
 
 ```
-|   .gitignore
-|   LICENSE.md
-|   mkdocs.yml
-|   README.md
-|   requirements.txt
-|
-+---docs
-|   |   index.md
-|   |
-|   +---.icons
-|   |   \---logos
-|   |           iclogo.svg
-|   |
-|   \---assets
-|           iclogo.png
-|
-+---FEM_Module
-|       FEM_Module_class.py
-|
-\---notebooks
-    |   Part_1.ipynb
-    |   Part_2.ipynb
-    |
-    \---img
+│   .gitignore
+│   LICENSE.md
+│   mkdocs.yml
+│   README.md
+│   requirements.txt
+│
+├───.devcontainer
+│       devcontainer.json
+│       Dockerfile
+│
+├───.github
+│   └───workflows
+│           docs.yml
+│           link_checker.yml
+│
+├───.ipynb_checkpoints
+├───docs
+│   │   index.md
+│   │
+│   ├───.icons
+│   │   └───logos
+│   │           iclogo.svg
+│   │
+│   └───assets
+│           iclogo.png
+│
+├───FEM_Module
+│   │   FEM_Module_class.py
+│   │   Run_Cantilever_Example.py
+│   │   Support_functions.py
+│   │
+│   └───__pycache__
+│           FEM_Module_class.cpython-311.pyc
+│           Run_Cantilever_Example.cpython-311.pyc
+│           Support_functions.cpython-311.pyc
+│
+└───notebooks
+    │   .placeholder
+    │   Part_1.ipynb
+    │   Part_2.ipynb
+    │
+    ├───.ipynb_checkpoints
+    │       Part_1-checkpoint.ipynb
+    │       Part_2-checkpoint.ipynb
+    │       Part_2_withlinear-checkpoint.ipynb
+    │
+    └───img
             Cantilever_diagram.png
+            cantilever_result.png
             element_in_mesh.png
             element_types.png
             hat_functions_as_basis.png
             isoparametric_triangle.png
+            line_element_diag.png
             mapping_to_isoparametric.png
             rectangularmesh.png
             rectangular_mesh_simple.png
