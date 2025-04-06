@@ -8,7 +8,7 @@
 
 Finite Element Method (FEM) is a powerful computational method used across a wide variety of disciplines, including engineering, mathematics and earth science. It is used to solve complex differential equations and simulate real-world scenarios. This project focuses on application of FEM in solid mechanics, but the teachings can be extended to other areas of study.
 It provides a comprehensive, step-by-step tutorial designed to introduce users to the fundamentals of FEM and its practical implementation in Python. The tutorial takes users through all the key stages of numerical simulations, starting from domain meshing and problem discretisation, moving to solving the differential equations and finally analysing and understanding the results.  
-# To make the learning process intuitive, the project begins with a straightforward example that demonstrates the methodology and code implementation. As users progress, they are gradually introduced to more advanced aspects of FEM, ensuring a solid foundation and deeper understanding of this method.
+To make the learning process intuitive, the project works through two examples of increasing difficulty. The first example is straightforward and demonstrates the methodology and code implementation. As users progress, they are gradually introduced to more advanced aspects of FEM, ensuring a solid foundation and deeper understanding of this method.
 
 <!-- What should the students going through your exemplar learn -->
 
