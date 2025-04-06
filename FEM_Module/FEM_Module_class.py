@@ -421,8 +421,7 @@ class FEM_model:
         num_nodes = len(mesh.points)
 
         if os.path.exists(filename):
-            print(f"File '{filename}' already exists. Please provide a different name")
-            return
+            raise FileExistsError(f"File '{filename}' already exists. Please provide a different name")
 
         file = open(filename, "w")  # creae an empty file
         file.write("# vtk DataFile Version 3.0 ")
