@@ -107,10 +107,9 @@ class Run_Cantilever:
         # The Triangulation function needs only corners of elements, which
         # are the first three corners for triangulared mesh
         # For 2D elements this will be the first 3 nodes
-        if self.element_name in cells:
-            triangles = np.array(cells[self.element_name])[:, :3]
-        else:
+        if self.element_name not in cells:
             raise ValueError("The mesh does not contain triangular elements.")
+        triangles = np.array(cells[self.element_name])[:, :3]
 
         # Prepare data for Triangulation
         x, y = points[:, 0], points[:, 1]
