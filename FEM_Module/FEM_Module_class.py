@@ -15,7 +15,30 @@ class FEM_model:
         whether the domain is in 2D or 3D"""
         self.solution = np.empty((0, domain_dim))
         self.domain_dim = domain_dim
-        
+
+        self.Youngs_modulus = 1e6
+        self.Poisson_ratio = 0.25
+
+        self.degree = 2
+
+        self.element_list_2D = []
+        self.global_node_coords = []
+        self.x_start = 0
+        self.x_end = 10
+        self.c=3
+
+        self.num_nodes = 0.
+        self.A_matrix = np.empty((2,2))  ## note that for each node there are 2 d.o.f
+        self.b = np.zeros((2,))
+        self.x = np.zeros((2,))
+
+        self.nodes_on_left_ = []
+        self.nodes_on_right_ = []
+        self.elements_left_ =  []
+        self.elements_right_ = []
+
+        self.P = 80
+
 
     def domain_mesh(self,  element_degree, refinement, x_limits, y_limits,
                     z_limits=[0, 0]):
@@ -47,7 +70,8 @@ class FEM_model:
 
 
         """
-
+        if element_degree not in (1, 2):
+            raise ValueError("For this exercise degree must be linear (1) or quadratic (2)")
         self.degree = element_degree
 
         # Create the pygmsh mesh objec with the specified input arguments
@@ -100,17 +124,16 @@ class FEM_model:
         # The Triangulation function needs only corners of elements, which
         # are the first three corners for triangulared mesh
         # For 2D elements this will be the first 3 nodes
-        if self.element_name in cells:
-            triangles = np.array(cells[self.element_name])[:, :3]
-        else:
+        if self.element_name not in cells:
             raise ValueError("The mesh does not contain triangular elements.")
-
+        triangles = np.array(cells[self.element_name])[:, :3]
+        
         # Prepare data for Triangulation
         x, y = points[:, 0], points[:, 1]
         triangulation = Triangulation(x, y, triangles)
 
         # Plot the mesh
-        plt.figure(figsize=(10, 5))
+        plt.figure()
         plt.triplot(triangulation, color='blue', lw=0.8)
         plt.scatter(x, y, color='red', s=10, zorder=5)
         plt.title("Mesh Visualization")
@@ -120,7 +143,7 @@ class FEM_model:
         plt.grid(True)
         plt.show()
 
-    def integrationPoints(self):
+    def integration_points(self):
         """
         The Gaussian integeration points for isoparametric 2D triangles.
         Currently supports only quadratic and cubic elements.
@@ -136,13 +159,7 @@ class FEM_model:
         Points : numpy.array of shape (n,2), where n depends on element degree.
         weights : numpy.array of shape (1,n)
 
-        Example:
-            >>> integrationPoints()
-            np.array([[1 / 6., 2 / 3.], [1 / 6., 1 / 6],[2 / 3., 1 / 6.]]),
-            np.array([1., 1., 1., 1.]) * 1 / 6.
-
         """
-
         Points = np.array([[1 / 6., 2 / 3.], [1 / 6., 1 / 6],
                                [2 / 3., 1 / 6.]])
 
@@ -267,7 +284,7 @@ class FEM_model:
 
         return dNs
 
-    def Jacobian(self, point, corner_nodes):
+    def jacobian(self, point, corner_nodes):
         """
         Calculate the Jacobian matrix for mapping between the global and local
         coordinate systems. The Jacobian matrix is calculated at point in local
@@ -421,8 +438,7 @@ class FEM_model:
         num_nodes = len(mesh.points)
 
         if os.path.exists(filename):
-            print(f"File '{filename}' already exists. Please provide a different name")
-            return
+            raise FileExistsError(f"File '{filename}' already exists. Please provide a different name")
 
         file = open(filename, "w")  # creae an empty file
         file.write("# vtk DataFile Version 3.0 ")
