@@ -93,7 +93,7 @@ def write_vtk(degree, mesh, solution_x, domain_dim, variable_name, variable_type
     file.close()
 
 def visualise_basis_fn(show_basis_fn, basis_functions):
-    """ Function to visualise how the basis functions vary inside the quadratic isoparametric element
+    """Function to visualise how the basis functions vary inside the quadratic isoparametric element
         -----------
         show_basis_fn : list of integers indicating the local node ID (up to 6). This will plot the corresponding basis functions
         basis_functions : function that calculates the basis function for a given point
