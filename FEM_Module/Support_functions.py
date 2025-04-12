@@ -7,7 +7,8 @@ import pygmsh
 
 def write_vtk(degree, mesh, solution_x, domain_dim, variable_name, variable_type, filename):
     """ Function to create a vtk file for the solution field to be viewed in Paraview
-     Parameters
+
+        Parameters
         -----------
         degree : degree of elements in the mesh
         mesh : pygmsh.geo.Geometry() object that contain the information about the elements and coordinates of the domain
