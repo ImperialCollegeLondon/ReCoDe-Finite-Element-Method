@@ -5,6 +5,10 @@ matplotlib
 plotly
 pygmsh
 
+# Dev
+pre-commit
+ruff
+
 # Documentation
 mkdocs==1.5.3
 mkdocs-include-markdown-plugin==3.7.1
