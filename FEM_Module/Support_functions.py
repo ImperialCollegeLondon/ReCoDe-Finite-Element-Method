@@ -127,9 +127,7 @@ def visualise_basis_fn(show_basis_fn, basis_functions):
     fig = make_subplots(
         rows=1, cols=3,
         specs=[[{'type': 'scatter3d'}, {'type': 'scatter3d'}, {'type': 'scatter3d'}]],
-        subplot_titles=["Basis function " + str(show_basis_fn[0]), \
-                        "Basis function" + str(show_basis_fn[1]), \
-                        "Basis function " + str(show_basis_fn[2])]
+        subplot_titles=[f"Basis function {i}" for i in show_basis_fn]
     )
 
     # Iterate through every basis functions ID to calculate the basis function value and add it to the plot
