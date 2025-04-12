@@ -159,7 +159,7 @@ def visualise_basis_fn(show_basis_fn, basis_functions):
         scene=dict(
             xaxis_title="r",
             yaxis_title="s",
-            zaxis_title="$\phi$",
+            zaxis_title=r"$\phi$",
             aspectmode="cube"
         ),
         # zoom out in each plot
