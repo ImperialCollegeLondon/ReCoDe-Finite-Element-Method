@@ -50,7 +50,7 @@ class Run_Cantilever:
     def domain_mesh(self,  element_degree, refinement, x_limits, y_limits,
                     z_limits=[0, 0]):
         """This function creates the domain boundary and meshes the domain
-        based on the input argumnts.The domain is assumed to be rectangular
+        based on the input arguments.The domain is assumed to be rectangular
         shape.
 
         Parameters
@@ -81,7 +81,7 @@ class Run_Cantilever:
             raise ValueError("For this exercise degree must be linear (1) or quadratic (2)")
         self.degree = element_degree
 
-        # Create the pygmsh mesh objec with the specified input arguments
+        # Create the pygmsh mesh object with the specified input arguments
         with pygmsh.geo.Geometry() as geom:
             geom.add_rectangle(xmin=x_limits[0], xmax=x_limits[1],
                                ymin=y_limits[0], ymax=y_limits[1],
@@ -113,7 +113,7 @@ class Run_Cantilever:
         domain, the refinement level and the nodes. The function requires the
         domain is created using domain_mesh() first.
 
-        TO DO : Adjust the number of corners if exteded to 3D
+        TO DO : Adjust the number of corners if extended to 3D
 
         Parameters
         ----------
@@ -155,7 +155,7 @@ class Run_Cantilever:
 
     def integration_points(self):
         """
-        The Gaussian integeration points for isoparametric 2D triangles.
+        The Gaussian integration points for isoparametric 2D triangles.
         Currently supports only quadratic and cubic elements.
 
         TO DO: change to 3D points if extended to 3D.
@@ -231,7 +231,7 @@ class Run_Cantilever:
         r = point[0]
         s = point[1]
 
-        # linear eleemnt
+        # linear element
         if self.degree == 1:
             dNr = np.zeros((3,))
             dNr[0] = -1
@@ -338,7 +338,7 @@ class Run_Cantilever:
                                 system in range [0,1]
 
         corner_nodes (list of list of floats): a list of coordinates of corner
-                    nodes in the elment in global coordinate system
+                    nodes in the element in global coordinate system
 
         Returns
         -------
@@ -492,8 +492,8 @@ class Run_Cantilever:
                 # -- Step 10. Multiply the matrix from Step 9 by B
                 BT = np.matmul(BT, B)
                 # -- Step 11. Multiply the final matrix by Jacobian determinant and weight of the integration point
-                BT = BT * weight*(detJ) ## currently assume all the wieght of IP are the same
-                # -- Step 12. Add the resuling matrix to the element stiffness matrix LHS
+                BT = BT * weight*(detJ) ## currently assume all the weight of IP are the same
+                # -- Step 12. Add the resulting matrix to the element stiffness matrix LHS
                 LHS += BT     
             # -- Step 13. Accumulate the element stiffness matrix LHS to global matrix A
     # ----------  The accumulation of the first d.o.f for the node is given as a hint
@@ -540,7 +540,7 @@ class Run_Cantilever:
 
                 # take the y-coordinate of the middle node as the average of the element
                 y_value_ = self.mesh.points[element[2]][1] 
-                # initialise the empy traction vector in x- and y-directions respectively
+                # initialise the empty traction vector in x- and y-directions respectively
                 traction = [0,0]
                 # set the traction in the x-direction
                 traction[0]= 0.
@@ -687,7 +687,7 @@ class Run_Cantilever:
         contributions.
 
         b (numpy row vector) : the right-hand-side vector of the linear system
-        of equations. This contains the boundary condtions information of the
+        of equations. This contains the boundary conditions information of the
         system.
 
         Returns
@@ -704,7 +704,7 @@ class Run_Cantilever:
 
         Parameters
         -----------
-        x,y (floats) : gloabl coordinates of the point
+        x,y (floats) : global coordinates of the point
         P (float) : load applied at the end of the beam
         L (float) : length of the beam
         E (float) : Youngs modulus
@@ -725,7 +725,7 @@ class Run_Cantilever:
 
         Parameters
         -----------
-        x,y (floats) : gloabl coordinates of the point
+        x,y (floats) : global coordinates of the point
         P (float) : load applied at the end of the beam
         L (float) : length of the beam
         E (float) : Youngs modulus

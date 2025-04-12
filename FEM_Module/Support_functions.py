@@ -28,7 +28,7 @@ def write_vtk(degree, mesh, solution_x, domain_dim, variable_name, variable_type
     if os.path.exists(filename):
         raise FileExistsError(f"File '{filename}' already exists. Please provide a different name")
 
-    file = open(filename, "w")  # creae an empty file
+    file = open(filename, "w")  # create an empty file
     file.write("# vtk DataFile Version 3.0 ")
     file.write("\nFinite-element dataset: variable: " + variable_name + ", timestep: 100")
     file.write("\nASCII \n\nDATASET UNSTRUCTURED_GRID \nPOINTS " + str(num_nodes) + " float\n")
@@ -73,7 +73,7 @@ def write_vtk(degree, mesh, solution_x, domain_dim, variable_name, variable_type
     for element in mesh.cells_dict[element_types[1][0]]:
         file.write(str(element_types[1][1]) + "\n")
 
-    ## add the value of the solution fiel for each node
+    ## add the value of the solution field for each node
     ## note the difference in set up based on whether the solution is scalar or vector
     file.write("\nPOINT_DATA " + str(len(mesh.points)) + "\n")
 

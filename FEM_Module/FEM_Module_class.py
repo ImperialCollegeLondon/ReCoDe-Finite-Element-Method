@@ -43,7 +43,7 @@ class FEM_model:
     def domain_mesh(self,  element_degree, refinement, x_limits, y_limits,
                     z_limits=[0, 0]):
         """This function creates the domain boundary and meshes the domain
-        based on the input argumnts.The domain is assumed to be rectangular
+        based on the input arguments.The domain is assumed to be rectangular
         shape.
 
         Parameters
@@ -74,7 +74,7 @@ class FEM_model:
             raise ValueError("For this exercise degree must be linear (1) or quadratic (2)")
         self.degree = element_degree
 
-        # Create the pygmsh mesh objec with the specified input arguments
+        # Create the pygmsh mesh object with the specified input arguments
         with pygmsh.geo.Geometry() as geom:
             geom.add_rectangle(xmin=x_limits[0], xmax=x_limits[1],
                                ymin=y_limits[0], ymax=y_limits[1],
@@ -103,7 +103,7 @@ class FEM_model:
         domain, the refinement level and the nodes. The function requires the
         domain is created using domain_mesh() first.
 
-        TO DO : Adjust the number of corners if exteded to 3D
+        TO DO : Adjust the number of corners if extended to 3D
 
         Parameters
         ----------
@@ -145,7 +145,7 @@ class FEM_model:
 
     def integration_points(self):
         """
-        The Gaussian integeration points for isoparametric 2D triangles.
+        The Gaussian integration points for isoparametric 2D triangles.
         Currently supports only quadratic and cubic elements.
 
         TO DO: change to 3D points if extended to 3D.
@@ -221,7 +221,7 @@ class FEM_model:
         r = point[0]
         s = point[1]
 
-        # linear eleemnt
+        # linear element
         if self.degree == 1:
             dNr = np.zeros((3,))
             dNr[0] = -1
@@ -297,7 +297,7 @@ class FEM_model:
                                 system in range [0,1]
 
         corner_nodes (list of list of floats): a list of coordinates of corner
-                    nodes in the elment in global coordinate system
+                    nodes in the element in global coordinate system
 
         Returns
         -------
@@ -415,7 +415,7 @@ class FEM_model:
         contributions.
 
         b (numpy row vector) : the right-hand-side vector of the linear system
-        of equations. This contains the boundary condtions information of the
+        of equations. This contains the boundary conditions information of the
         system.
 
         Returns
@@ -440,7 +440,7 @@ class FEM_model:
         if os.path.exists(filename):
             raise FileExistsError(f"File '{filename}' already exists. Please provide a different name")
 
-        file = open(filename, "w")  # creae an empty file
+        file = open(filename, "w")  # create an empty file
         file.write("# vtk DataFile Version 3.0 ")
         file.write("\nFinite-element dataset: variable: " + variable_name + ", timestep: 100")
         file.write("\nASCII \n\nDATASET UNSTRUCTURED_GRID \nPOINTS " + str(num_nodes) + " float\n")
@@ -485,7 +485,7 @@ class FEM_model:
         for element in mesh.cells_dict[element_types[1][0]]:
             file.write(str(element_types[1][1]) + "\n")
 
-        ## add the value of the solution fiel for each node
+        ## add the value of the solution field for each node
         ## note the difference in set up based on whether the solution is scalar or vector
         file.write("\nPOINT_DATA " + str(len(mesh.points)) + "\n")
 
@@ -509,7 +509,7 @@ class FEM_model:
 
         Parameters
         -----------
-        x,y (floats) : gloabl coordinates of the point
+        x,y (floats) : global coordinates of the point
         P (float) : load applied at the end of the beam
         L (float) : length of the beam
         E (float) : Youngs modulus
@@ -530,7 +530,7 @@ class FEM_model:
 
         Parameters
         -----------
-        x,y (floats) : gloabl coordinates of the point
+        x,y (floats) : global coordinates of the point
         P (float) : load applied at the end of the beam
         L (float) : length of the beam
         E (float) : Youngs modulus
