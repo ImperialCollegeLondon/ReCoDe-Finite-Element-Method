@@ -131,10 +131,8 @@ def visualise_basis_fn(show_basis_fn, basis_functions):
     )
 
     # Iterate through every basis functions ID to calculate the basis function value and add it to the plot
-
-    for i in range(len(show_basis_fn)):
-        z = []
-        basis_fn_id = show_basis_fn[i]
+    z = []
+    for i, basis_fn_id in enumerate(show_basis_fn):
         # Get the values of basis function at points x_,y_
         for x_, y_ in zip(x, y):
             phi_all = basis_functions(degree, [x_, y_])
